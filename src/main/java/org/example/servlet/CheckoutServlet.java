@@ -87,7 +87,7 @@ public class CheckoutServlet extends HttpServlet {
                 .append("<th>Tổng cộng</th>")
                 .append("</tr>");
         sb.append("<tr>")
-                .append("<td>").append(orderItem.get).append("</td>")
+                .append("<td>").append("").append("</td>")
                 .append("<td>").append(orderItem.getQuantity()).append("</td>")
                 .append("<td>").append(formatCurrency(unitPrice)).append("</td>")
                 .append("<td>").append(formatCurrency(totalAmount)).append("</td>")
