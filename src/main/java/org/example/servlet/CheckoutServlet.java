@@ -59,7 +59,7 @@ public class CheckoutServlet extends HttpServlet {
 
         // Prepare email content
         String subject = "Hóa đơn mua hàng từ [Tên Cửa Hàng]";
-        String messageContent = generateInvoiceEmailContent(user, order, orderItem);
+        String messageContent = generateInvoiceEmailContent(user, orderItem, unitPrice, totalAmount, paymentMethod);
 
         try {
             // Send the invoice email
@@ -73,7 +73,7 @@ public class CheckoutServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/orders");
     }
 
-    private String generateInvoiceEmailContent(User user,  OrderItem orderItem, BigDecimal unitPrice, BigDecimal totalAmount, String paymentMethod) {
+    private String generateInvoiceEmailContent(User user, OrderItem orderItem, BigDecimal unitPrice, BigDecimal totalAmount, String paymentMethod) {
         // You can enhance this method to include more details and format it as needed
         StringBuilder sb = new StringBuilder();
         sb.append("<h2>Hóa Đơn Mua Hàng</h2>");
@@ -93,7 +93,7 @@ public class CheckoutServlet extends HttpServlet {
                 .append("<td>").append(formatCurrency(totalAmount)).append("</td>")
                 .append("</tr>");
         sb.append("</table>");
-        sb.append("<p>Tổng thanh toán: <strong>").append(formatCurrency(order.getTotalAmount())).append("</strong></p>");
+        sb.append("<p>Tổng thanh toán: <strong>").append(formatCurrency(totalAmount)).append("</strong></p>");
         sb.append("<p>Phương thức thanh toán: ").append(paymentMethod).append("</p>");
         sb.append("<p>Địa chỉ giao hàng: ").append(user.getAddress()).append("</p>");
         sb.append("<p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.</p>");

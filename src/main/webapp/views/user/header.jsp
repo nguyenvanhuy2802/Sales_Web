@@ -10,69 +10,85 @@
     <meta name="context-path" content="${pageContext.request.contextPath}">
     <title>Web Bán Linh Kiện Máy Tính</title>
 
-
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
     <link rel="icon" href="${pageContext.request.contextPath}/images/computer.png" type="image/png">
 
     <style>
         body {
             font-family: 'Roboto', sans-serif;
         }
-        .collapse {
-            display: none;
+        /* Tùy chỉnh thanh tìm kiếm */
+        .navbar .form-control {
+            width: 250px;
         }
-
-        .collapse.show {
-            display: table-row;
+        @media (max-width: 992px) {
+            .navbar .form-control {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/product">Linh Kiện Máy Tính</a>
+            <!-- Logo và tên thương hiệu -->
+            <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/product">
+                <img src="${pageContext.request.contextPath}/images/computer.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+                Linh Kiện Máy Tính
+            </a>
+
+            <!-- Nút toggler cho mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Nội dung thanh điều hướng -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <!-- Form Tìm Kiếm -->
-                    <form class="d-flex me-3" action="search" method="get">
-                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm" name="query" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
-                    </form>
+                    <li class="nav-item me-3">
+                        <form class="d-flex" action="search" method="get">
+                            <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm" name="query" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                    </li>
 
                     <!-- Icon Giỏ Hàng -->
-                    <li class="nav-item">
+                    <li class="nav-item me-3">
                         <c:choose>
                             <c:when test="${not empty user}">
                                 <a class="nav-link position-relative" href="${pageContext.request.contextPath}/cart">
-                                    <span class="bi bi-cart-fill"></span>
+                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem;"></i>
                                     <c:if test="${cartItemCount > 0}">
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                             ${cartItemCount}
-                                            <span class="visually-hidden">unread messages</span>
+                                            <span class="visually-hidden">items in cart</span>
                                         </span>
                                     </c:if>
                                 </a>
                             </c:when>
                             <c:otherwise>
                                 <a class="nav-link" href="${pageContext.request.contextPath}/login?redirect=cart">
-                                    <span class="bi bi-cart-fill"></span>
+                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem;"></i>
                                 </a>
                             </c:otherwise>
                         </c:choose>
                     </li>
 
-                  <!-- Icon Đơn Hàng -->
-                    <li class="nav-item">
+                    <!-- Icon Đơn Hàng -->
+                    <li class="nav-item me-3">
                         <c:choose>
                             <c:when test="${not empty user}">
                                 <a class="nav-link position-relative" href="${pageContext.request.contextPath}/orders">
-                                    <span class="bi bi-box-seam"></span>
+                                    <i class="bi bi-box-seam" style="font-size: 1.5rem;"></i>
                                     <c:if test="${orderCount > 0}">
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                             ${orderCount}
@@ -83,7 +99,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a class="nav-link" href="${pageContext.request.contextPath}/login?redirect=orders">
-                                    <span class="bi bi-box-seam"></span>
+                                    <i class="bi bi-box-seam" style="font-size: 1.5rem;"></i>
                                 </a>
                             </c:otherwise>
                         </c:choose>
@@ -92,19 +108,23 @@
                     <!-- Đăng Nhập/Đăng Xuất -->
                     <c:choose>
                         <c:when test="${not empty user}">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Xin chào, ${user.getUsername()}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
+                                    ${user.getUsername()}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Hồ sơ</a></li>
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
+                                </ul>
                             </li>
                         </c:when>
                         <c:otherwise>
-                            <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/views/user/login.jsp">Đăng nhập</a>
+                            <li class="nav-item me-3">
+                                <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/views/user/login.jsp">Đăng nhập</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/views/user/register.jsp">Đăng ký</a>
+                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/views/user/register.jsp">Đăng ký</a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -112,3 +132,5 @@
             </div>
         </div>
     </nav>
+
+
