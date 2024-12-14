@@ -29,16 +29,14 @@ public class CategoryServlet extends HttpServlet {
         }
         List<Product> productList = productDAO.getAllProducts();
         List<Product> productListByCategoryId = new ArrayList<>();
-        Product currentProduct = null;
         if(!productList.isEmpty()){
             for (Product product : productList){
                 if(product.getCategoryId() == categoryId){
                     productListByCategoryId.add(product);
                 }
             }
-            currentProduct = productListByCategoryId.get(0);
         }
-        request.setAttribute("product", currentProduct);
+        request.setAttribute("categoryId", categoryId);
         request.setAttribute("productList", productListByCategoryId);
         request.getRequestDispatcher("views/user/category.jsp").forward(request, response);
     }

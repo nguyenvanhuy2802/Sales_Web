@@ -11,14 +11,14 @@
 
                     <!-- Thông báo lỗi -->
                     <c:if test="${not empty message}">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
                             ${message}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </c:if>
 
                     <!-- Form Đăng Ký -->
-                    <form action="${pageContext.request.contextPath}/register" method="post" enctype="multipart/form-data">
+                       <form action="${pageContext.request.contextPath}/register" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="username" class="form-label">Tên Đăng Nhập:</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
@@ -28,9 +28,9 @@
                             <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required>
                         </div>
                         <div class="mb-3">
-                            <label for="name" class="form-label">Họ và Tên:</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Nhập họ và tên" required>
-                        </div>
+                               <label for="information" class="form-label">Họ và Tên:</label>
+                               <input type="text" class="form-control" id="information" name="information" placeholder="Nhập họ và tên" required>
+                           </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>

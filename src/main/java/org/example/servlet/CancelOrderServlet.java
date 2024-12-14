@@ -34,7 +34,7 @@ public class CancelOrderServlet extends HttpServlet {
                 Order order = orderDAO.getOrderById(orderId);
                 boolean success = false;
                 if (order != null) {
-                    order.setStatus("Cancelled");
+                    order.setStatus("canceled");
                     success = orderDAO.updateOrder(order); // Ensure that the order is updated in the database
                 }
                 resp.setContentType("application/json");

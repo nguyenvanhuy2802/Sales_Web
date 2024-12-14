@@ -25,6 +25,7 @@ public class OrderServlet extends HttpServlet {
         List<Order> orderList = orderDAO.getAllOrders();
 
         List<Order> pendingOrders = new ArrayList<>();
+        List<Order> completeOrders = new ArrayList<>();
         List<Order> cancelledOrders = new ArrayList<>();
 
         if(!orderList.isEmpty()){
@@ -33,15 +34,20 @@ public class OrderServlet extends HttpServlet {
                     if(order.getStatus().equalsIgnoreCase("pending")){
                         pendingOrders.add(order);
                     }
-                    else if(order.getStatus().equalsIgnoreCase("cancelled")){
+                    else if(order.getStatus().equalsIgnoreCase("canceled")){
                         cancelledOrders.add(order);
+                    }
+                    else if(order.getStatus().equalsIgnoreCase("complete")){
+                        completeOrders.add(order);
                     }
                 }
             }
         }
 
         req.setAttribute("pendingOrders", pendingOrders);
+        req.setAttribute("completeOrders", completeOrders);
         req.setAttribute("cancelledOrders", cancelledOrders);
+
 
 
         req.getRequestDispatcher("/views/user/order.jsp").forward(req, resp);

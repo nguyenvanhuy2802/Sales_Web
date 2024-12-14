@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 // Áp dụng filter cho các URL cần bảo vệ
-@WebFilter(urlPatterns = {"/buyNow", "/addToCart", "/cart"})
+@WebFilter(urlPatterns = {"/buyNow", "/addToCart", "/cart", "/orders"})
 public class AuthenticationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

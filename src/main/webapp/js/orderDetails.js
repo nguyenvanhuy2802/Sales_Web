@@ -30,7 +30,7 @@ $(document).ready(function() {
 
               // Tạo bảng để hiển thị chi tiết sản phẩm
               const table = $('<table class="table table-bordered mt-3"></table>');
-              const thead = $('<thead class="table-light"><tr><th>Ảnh Sản Phẩm</th><th>Sản Phẩm</th><th>Số Lượng</th><th>Giá</th></tr></thead>');
+              const thead = $('<thead class="table-light"><tr><th>Ảnh Sản Phẩm</th><th>Sản Phẩm</th><th>Số Lượng</th><th>Đơn giá</th></tr></thead>');
               const tbody = $('<tbody></tbody>');
 
               data.forEach(item => {

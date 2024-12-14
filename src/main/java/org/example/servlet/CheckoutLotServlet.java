@@ -53,7 +53,7 @@ public class CheckoutLotServlet extends HttpServlet {
             orderItemDAO.addOrderItem(new OrderItem(newOrderId, Integer.parseInt(productIds[i]), Integer.parseInt(quantities[i]), new BigDecimal(unitPrices[i])));
         }
         // Thêm payment mới
-        paymentDAO.addPayment(new Payment(newOrderId, new BigDecimal(totalPrice != null ? totalPrice : "0"), paymentMethod));
+//        paymentDAO.addPayment(new Payment(newOrderId, new BigDecimal(totalPrice != null ? totalPrice : "0"), paymentMethod));
 
         // Xóa các cartItem trong giỏ hàng được checkbox
         for (String cartitemId : cartitemIds) {

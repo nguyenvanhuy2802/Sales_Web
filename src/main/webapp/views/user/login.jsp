@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<div class="content-wrapper">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
@@ -48,6 +49,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <%@ include file="footer.jsp" %>

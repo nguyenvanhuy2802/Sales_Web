@@ -19,30 +19,18 @@
     <!-- Favicon -->
     <link rel="icon" href="${pageContext.request.contextPath}/images/computer.png" type="image/png">
 
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
-        /* Tùy chỉnh thanh tìm kiếm */
-        .navbar .form-control {
-            width: 250px;
-        }
-        @media (max-width: 992px) {
-            .navbar .form-control {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/headerstyles.css">
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
             <!-- Logo và tên thương hiệu -->
-            <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/product">
-                <img src="${pageContext.request.contextPath}/images/computer.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
-                Linh Kiện Máy Tính
-            </a>
+          <a class="navbar-brand fw-bold d-flex align-items-center" href="${pageContext.request.contextPath}/product">
+              <img src="${pageContext.request.contextPath}/images/computer.png" alt="Logo Linh Kiện Máy Tính"
+                   class="logo-img me-2">
+              <span class="brand-name">Linh Kiện Máy Tính</span>
+          </a>
 
             <!-- Nút toggler cho mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -110,8 +98,8 @@
                         <c:when test="${not empty user}">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
-                                    ${user.getUsername()}
+                                   <img src="${pageContext.request.contextPath}${user.profileImage}" alt="User Avatar" class="user-avatar me-2">
+                                    ${user.name}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Hồ sơ</a></li>

@@ -11,18 +11,17 @@ public class UserDAO {
 
     // Thêm người dùng mới
     public void addUser(User user)  {
-        String sql = "INSERT INTO users (name, email, phone, username, address, password, role, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, phone, username, address, password, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPhone());
-            stmt.setString(4, user.getUsername()); // Added username
+            stmt.setString(4, user.getUsername());
             stmt.setString(5, user.getAddress());
             stmt.setString(6, user.getPassword());
-            stmt.setString(7, user.getRole());
-            stmt.setString(8, user.getProfileImage());
+            stmt.setString(7, user.getProfileImage());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -47,6 +46,35 @@ public class UserDAO {
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
                 user.setUsername(rs.getString("username")); // Added username
+                user.setAddress(rs.getString("address"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setProfileImage(rs.getString("profile_image"));
+                user.setCreatedAt(rs.getTimestamp("created_at"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
+
+    // Lấy người dùng theo Username
+    public User getUserByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        User user = null;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setUsername(rs.getString("username"));
                 user.setAddress(rs.getString("address"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
@@ -122,4 +150,24 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public int getCurrentAutoIncrementId() {
+        String sql = "SELECT AUTO_INCREMENT " +
+                "FROM information_schema.TABLES " +
+                "WHERE TABLE_SCHEMA = 'computer_db' AND TABLE_NAME = 'users'";
+        int autoIncrementId = -1;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                autoIncrementId = rs.getInt("AUTO_INCREMENT");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving auto increment ID", e);
+        }
+        return autoIncrementId;
+    }
+
 }

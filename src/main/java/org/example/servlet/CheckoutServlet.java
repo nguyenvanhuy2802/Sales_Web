@@ -45,8 +45,6 @@ public class CheckoutServlet extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
 
-        // Create and save the order
-        Order order = new Order(user.getUserId(), totalAmount);
         int newOrderId = orderDAO.addOrderId(new Order(user.getUserId(), totalAmount));
 
         // Create and save the order item
@@ -54,8 +52,8 @@ public class CheckoutServlet extends HttpServlet {
         orderItemDAO.addOrderItem(orderItem);
 
         // Create and save the payment
-        Payment payment = new Payment(newOrderId, totalAmount, paymentMethod);
-        paymentDAO.addPayment(payment);
+//        Payment payment = new Payment(newOrderId, totalAmount, paymentMethod);
+//        paymentDAO.addPayment(payment);
 
         // Prepare email content
         String subject = "Hóa đơn mua hàng từ [Tên Cửa Hàng]";

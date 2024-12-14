@@ -1,4 +1,4 @@
-package org.example.servlet;
+package org.example.servlet.admin;
 
 
 import org.example.DAO.UserDAO;
@@ -14,17 +14,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/loginAdmin")
+public class LoginAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String redirect = req.getParameter("redirect");
-        String id = req.getParameter("id");
-
-        req.setAttribute("redirect", redirect);
-        req.setAttribute("id", id);
-
-        req.getRequestDispatcher("views/user/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("views/admin/adminLogin.jsp").forward(req, resp);
     }
 
     @Override
@@ -41,30 +35,16 @@ public class LoginServlet extends HttpServlet {
                 currentUser = user;
             }
         }
-        if (currentUser != null && currentUser.getPassword().equals(password)) {
+        if (currentUser != null && currentUser.getPassword().equals(password) && currentUser.getRole().equalsIgnoreCase("admin")) {
             // Đăng nhập thành công
             HttpSession session = request.getSession();
-            session.setAttribute("user", currentUser);
+            session.setAttribute("admin", currentUser);
+            response.sendRedirect(request.getContextPath() + "/homeAdmin");
 
-            // Xử lý tham số redirect
-            String redirect = request.getParameter("redirect");
-            String id = request.getParameter("id");
-            if (redirect != null) {
-                String redirectURL = switch (redirect) {
-                    case "cart" -> "/cart";
-                    case "orders" -> "/orders";
-                    case "buyNow" -> "/buyNow?id=" + URLEncoder.encode(id, "UTF-8");
-                    case "addToCart" -> "/addToCart?id=" + URLEncoder.encode(id, "UTF-8");
-                    default -> "/product";
-                };
-                response.sendRedirect(request.getContextPath() + redirectURL);
-            } else {
-                response.sendRedirect(request.getContextPath() + "/product");
-            }
         } else {
             // Đăng nhập thất bại
             request.setAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng.");
-            request.getRequestDispatcher("views/user/login.jsp").forward(request, response);
+            request.getRequestDispatcher("views/admin/adminLogin.jsp").forward(request, response);
         }
     }
 }
