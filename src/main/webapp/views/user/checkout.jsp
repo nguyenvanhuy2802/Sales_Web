@@ -64,6 +64,11 @@
                     <div class="form-text">Vui lòng nhập 10 chữ số.</div>
                 </div>
 
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email"
+                        value="${not empty user ? fn:escapeXml(user.email) : ''}" required>
+                </div>
                 <!-- Phương Thức Thanh Toán -->
                 <div class="mb-3">
                     <label for="paymentMethod" class="form-label">Phương thức thanh toán</label>

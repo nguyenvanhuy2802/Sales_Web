@@ -3,91 +3,65 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/product">Trang chủ</a></li>
-<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/category?categoryId=${product.categoryId}">${categoryName}</a></li>
-  </ol>
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb shadow-sm bg-light p-3 rounded">
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/product">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/category?categoryId=${categoryId}">${categoryName}</a></li>
+    </ol>
 </nav>
 
+<div class="content-wrapper">
 <div class="container mt-4">
     <h1 class="mb-4">Danh Sách Sản Phẩm - ${categoryName}</h1>
 
+    <!-- Kiểm tra nếu productList rỗng -->
+    <c:if test="${empty productList}">
+        <p class="text-center text-muted">Không có sản phẩm nào trong danh mục này.</p>
+    </c:if>
+
     <!-- Bắt đầu hàng chứa các sản phẩm -->
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         <c:forEach var="product" items="${productList}">
-            <div class="col-md-4 mb-4">
-                <div class="card product-card">
-                    <a href="${pageContext.request.contextPath}/productDetail?id=${product.productId}">
-                        <!-- Hiển thị hình ảnh sản phẩm -->
-                        <img src="${pageContext.request.contextPath}${product.productImage}" class="card-img-top product-card-img" alt="${product.name}">
-                    </a>
-
-                    <div class="card-body product-card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="product-description">${product.description}</p>
-                        <div class="product-price">
-                            <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />
-                            VNĐ
-                        </div>
-
-                        <!-- Nhóm nút hành động -->
-                        <div class="btn-group">
-                            <c:choose>
-                                <c:when test="${not empty user}">
-                                    <button type="button" class="btn btn-success action-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#actionModal"
-                                            data-action="buyNow"
-                                            data-id="${product.productId}"
-                                            data-name="${product.name}"
-                                            data-price="${product.price}"
-                                            data-image="${product.productImage}">
-                                        Mua Ngay
-                                    </button>
-                                    <button type="button" class="btn btn-primary action-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#actionModal"
-                                            data-action="addToCart"
-                                            data-id="${product.productId}"
-                                            data-name="${product.name}"
-                                            data-price="${product.price}"
-                                            data-image="${product.productImage}">
-                                        Thêm vào Giỏ
-                                    </button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button type="button" class="btn btn-success action-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#actionModal"
-                                            data-action="buyNow"
-                                            data-id="${product.productId}"
-                                            data-name="${product.name}"
-                                            data-price="${product.price}"
-                                            data-image="${product.productImage}">
-                                        Mua Ngay
-                                    </button>
-                                    <button type="button" class="btn btn-primary action-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#actionModal"
-                                            data-action="addToCart"
-                                            data-id="${product.productId}"
-                                            data-name="${product.name}"
-                                            data-price="${product.price}"
-                                            data-image="${product.productImage}">
-                                        Thêm vào Giỏ
-                                    </button>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           <div class="col-12 col-sm-6 col-md-4">
+                               <div class="card h-100 shadow border-0 rounded-3 product-card">
+                                   <a href="${pageContext.request.contextPath}/productDetail?id=${product.productId}" class="text-decoration-none">
+                                       <img src="${pageContext.request.contextPath}${product.productImage}"
+                                            class="card-img-top product-card-img rounded-top"
+                                            alt="${product.name}" loading="lazy">
+                                   </a>
+                                   <div class="card-body d-flex flex-column">
+                                       <h5 class="card-title text-truncate">${product.name}</h5>
+                                       <p class="product-description text-muted text-truncate">Mô tả: ${product.description}</p>
+                                       <div class="mt-3">
+                                           <div class="product-price fw-bold text-success mb-3">
+                                               Giá:
+                                               <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" /> VNĐ
+                                           </div>
+                                           <div class="btn-group d-flex gap-2">
+                                               <button type="button" class="btn btn-outline-primary flex-grow-1"
+                                                       data-bs-toggle="modal" data-bs-target="#actionModal"
+                                                       data-action="addToCart" data-id="${product.productId}"
+                                                       data-name="${product.name}" data-price="${product.price}"
+                                                       data-image="${product.productImage}">
+                                                   <i class="bi bi-cart-plus me-2"></i>Thêm vào Giỏ
+                                               </button>
+                                               <button type="button" class="btn btn-success flex-grow-1"
+                                                       data-bs-toggle="modal" data-bs-target="#actionModal"
+                                                       data-action="buyNow" data-id="${product.productId}"
+                                                       data-name="${product.name}" data-price="${product.price}"
+                                                       data-image="${product.productImage}">
+                                                   <i class="bi bi-credit-card me-2"></i>Mua Ngay
+                                               </button>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
         </c:forEach>
     </div>
     <!-- Kết thúc hàng chứa các sản phẩm -->
 </div>
-
+</div>
 <!-- Modal Chung cho Mua Ngay và Thêm vào Giỏ Hàng -->
 <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
     <div class="modal-dialog">

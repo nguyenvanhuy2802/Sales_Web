@@ -1,0 +1,75 @@
+body {
+        font-family: 'Roboto', sans-serif;
+          padding-top: 70px;
+    }
+.navbar .form-control {
+    width: 600px;
+}
+@media (max-width: 992px) {
+    .navbar .form-control {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+html, body {
+    height: 100%; /* Chiều cao toàn màn hình */
+    margin: 0; /* Loại bỏ khoảng cách mặc định */
+    display: flex;
+    flex-direction: column;
+}
+.content-wrapper {
+        flex: 1; /* Đẩy footer xuống khi nội dung ngắn */
+}
+footer {
+    background-color: #f8f9fa; /* Màu nền nhẹ */
+    text-align: center; /* Căn giữa nội dung */
+    padding: 1rem; /* Khoảng cách trên/dưới */
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+}
+
+.logo-img {
+    width: 40px; /* Tăng kích thước logo */
+    height: 40px;
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+    border-radius: 50%; /* Bo tròn logo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ nhẹ */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.brand-name {
+    font-family: 'Roboto', sans-serif; /* Font chữ hiện đại */
+    font-weight: bold;
+    color: #333; /* Màu chữ tối */
+    font-size: 1.25rem; /* Tăng kích thước chữ */
+}
+
+.navbar-brand {
+    text-decoration: none;
+    color: inherit; /* Giữ nguyên màu sắc khi hover */
+}
+.user-avatar {
+    width: 35px; /* Chiều rộng của ảnh, bạn có thể điều chỉnh cho vừa vặn với header */
+    height: 35px; /* Chiều cao của ảnh */
+    border-radius: 50%; /* Bo tròn ảnh */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo khi cắt */
+    border: 2px solid #ddd; /* Viền nhẹ cho ảnh, có thể tùy chỉnh */
+    transition: transform 0.3s ease; /* Hiệu ứng phóng to khi hover */
+}
+
+.user-avatar:hover {
+    transform: scale(1.1); /* Phóng to ảnh khi hover */
+}
+

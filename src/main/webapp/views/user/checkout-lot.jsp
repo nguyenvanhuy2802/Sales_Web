@@ -98,32 +98,5 @@
     </c:if>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tính toán lại tổng tiền khi thay đổi số lượng
-        const quantities = document.querySelectorAll('input[name="quantities"]');
-        const grandTotalElement = document.querySelector('h4 strong');
-
-        quantities.forEach(function(quantityInput) {
-            quantityInput.addEventListener('change', function() {
-                updateTotal();
-            });
-        });
-
-        function updateTotal() {
-            let grandTotal = 0;
-            quantities.forEach(function(quantityInput) {
-                const row = quantityInput.closest('tr');
-                const unitPrice = parseFloat(row.querySelector('input[name="unitPrices"]').value);
-                const quantity = parseInt(quantityInput.value);
-                const totalAmount = unitPrice * quantity;
-                row.querySelector('input[name="totalAmounts"]').value = totalAmount;
-                row.querySelector('.totalPrice').innerHTML = new Intl.NumberFormat('vi-VN').format(totalAmount) + ' VNĐ';
-                grandTotal += totalAmount;
-            });
-            grandTotalElement.textContent = new Intl.NumberFormat('vi-VN').format(grandTotal) + ' VNĐ';
-        }
-    });
-</script>
-
+<script src="${pageContext.request.contextPath}/js/payLotNotice.js"></script>
 <%@ include file="footer.jsp" %>

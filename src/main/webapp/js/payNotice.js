@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const quantityInput = document.getElementById('quantity');
     const unitPriceElement = document.getElementById('unitPrice');
     const totalPriceElement = document.getElementById('totalPrice');
+    const hiddenQuantityInput = document.getElementById('hiddenQuantity');
+    const hiddenTotalAmountInput = document.getElementById('hiddenTotalAmount');
 
-    function updateTotalPrice() {
+    function updateTotalPriceAndHiddenQuantity() {
         let quantity = parseInt(quantityInput.value);
         if (isNaN(quantity) || quantity < 1) {
             quantity = 1;
@@ -15,22 +17,26 @@ document.addEventListener('DOMContentLoaded', function () {
         const unitPrice = parseInt(unitPriceElement.dataset.unitPrice, 10);
         const total = unitPrice * quantity;
 
-        // Format total without currency symbol and add "VND" suffix
+        // Cập nhật giá trị tổng cộng
         totalPriceElement.textContent = `${new Intl.NumberFormat('vi-VN').format(total)} VND`;
+
+        // Đồng bộ giá trị với trường ẩn
+        hiddenQuantityInput.value = quantity;
+        hiddenTotalAmountInput.value = total;
     }
 
     decreaseBtn.addEventListener('click', function () {
         let currentValue = parseInt(quantityInput.value);
         if (currentValue > 1) {
             quantityInput.value = currentValue - 1;
-            updateTotalPrice();
+            updateTotalPriceAndHiddenQuantity();
         }
     });
 
     increaseBtn.addEventListener('click', function () {
         let currentValue = parseInt(quantityInput.value);
         quantityInput.value = currentValue + 1;
-        updateTotalPrice();
+        updateTotalPriceAndHiddenQuantity();
     });
 
     quantityInput.addEventListener('input', function () {
@@ -38,8 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isNaN(value) || value < 1) {
             quantityInput.value = 1;
         }
-        updateTotalPrice();
+        updateTotalPriceAndHiddenQuantity();
     });
 
-    updateTotalPrice();
+    // Cập nhật ngay khi tải trang
+    updateTotalPriceAndHiddenQuantity();
 });
