@@ -22,6 +22,8 @@ public class GenerateKeyServlet extends HttpServlet {
         try {
             ElectronicSignature.genDSAKey();
             String publicKeyBase64 = Base64.getEncoder().encodeToString(ElectronicSignature.getPublicKeyDSA().getEncoded());
+            String privateKeyBase64 = Base64.getEncoder().encodeToString(ElectronicSignature.getPrivateKeyDSA().getEncoded());
+
             HttpSession session = request.getSession(false);
             User user = (User) session.getAttribute("user");
 
@@ -38,10 +40,13 @@ public class GenerateKeyServlet extends HttpServlet {
             PublicKey publicKey = new PublicKey(user.getUserId(), publicKeyBase64);
             boolean result = keyDAO.addKey(publicKey);
 
+
             // Trả về public key dưới dạng JSON
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"publicKey\":\"" + publicKeyBase64 + "\"}");
+            response.getWriter().write("{\"publicKey\":\"" + publicKeyBase64 + "\", \"privateKey\":\"" + privateKeyBase64 + "\"}");
+
+
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error generating key: " + e.getMessage());
             e.printStackTrace();
