@@ -46,7 +46,6 @@
 
 <script>
   function createKey() {
-  console.log(`${pageContext.request.contextPath}/generateKey`);
       fetch('${pageContext.request.contextPath}/generateKey')
           .then(response => {
               if (!response.ok) {
@@ -57,13 +56,36 @@
           .then(data => {
               const publicKeyInput = document.getElementById('publicKey');
               publicKeyInput.value = data.publicKey;
-              alert('Key generated successfully!');
+
+            // Download the private key
+            downloadKey(data.privateKey, "private_key.txt");
+
+            // Download the public key
+            downloadKey(data.publicKey, "public_key.txt");
+            alert('Key generated successfully!');
+
           })
           .catch(error => {
               console.error('There was a problem with the fetch operation:', error);
               alert('Failed to generate key!');
           });
   }
+
+function downloadKey(keyContent, fileName) {
+    // Create a Blob object containing the key content
+    const blob = new Blob([keyContent], { type: "text/plain" });
+
+    // Create a temporary <a> element for downloading the key
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    // Clean up the object URL
+    URL.revokeObjectURL(anchor.href);
+}
 
     function uploadKey() {
         alert('Upload key logic here!');
