@@ -119,6 +119,61 @@ CREATE TABLE IF NOT EXISTS wishlist_items (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
+CREATE TABLE IF NOT EXISTS public_key (
+    key_id INT AUTO_INCREMENT PRIMARY KEY, 
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    name VARCHAR(2000) NOT NULL,
+    createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    endTime TIMESTAMP NULL DEFAULT NULL,
+    status ENUM('Enabled', 'Disabled', 'Expired') NOT NULL DEFAULT 'Enabled',
+    reportTime TIMESTAMP NULL DEFAULT NULL
+);
+
+
+-- Đặt thời gian cho endTime 
+DELIMITER $$
+
+CREATE TRIGGER set_end_time
+BEFORE INSERT ON `public_key`
+FOR EACH ROW
+BEGIN
+    SET NEW.endTime = DATE_ADD(NEW.createdTime, INTERVAL 7 DAY);
+END$$
+
+DELIMITER ;
+
+
+-- Cập nhật trạng thái của key
+
+SET GLOBAL event_scheduler = ON;
+SET GLOBAL event_scheduler = OFF;
+
+SHOW VARIABLES LIKE 'event_scheduler';
+
+
+
+CREATE EVENT IF NOT EXISTS update_key_status
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    UPDATE `public_key`
+    SET status = 'Expired'
+    WHERE endTime <= NOW() AND status = 'Enabled';
+END;
+
+-- SELECT NOW();
+
+
+
+
+
+
+
+
+
+
+
+
 -- Select the database
 USE computer_db;
 
