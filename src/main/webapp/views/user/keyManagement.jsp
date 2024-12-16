@@ -16,9 +16,9 @@
 
         <!-- Buttons Section -->
         <div class="d-flex mb-4 gap-3">
-            <button class="btn btn-primary" onclick="createKey()">Tạo key</button>
+            <button class="btn btn-primary" onclick="promptKeyCreation()">Tạo key</button>
             <button class="btn btn-secondary" onclick="openUploadKeyModal()">Upload key</button>
-            <button class="btn btn-info text-white" onclick="generateReport()">Report</button>
+            <button class="btn btn-info text-white" onclick="promptReport()">Report</button>
         </div>
 
        <!-- Public Key Display Section -->
@@ -43,6 +43,7 @@
        </div>
     </div>
 </div>
+
 
 <!-- Upload Key Modal -->
 <div class="modal fade" id="uploadKeyModal" tabindex="-1" aria-labelledby="uploadKeyModalLabel" aria-hidden="true">
@@ -100,6 +101,13 @@
                 console.error('There was a problem with the fetch operation:', error);
                 alert('Failed to generate key!');
             });
+    }
+
+    function promptKeyCreation() {
+        const userConfirmation = confirm("Bạn có muốn tạo bộ key mới không?");
+        if (userConfirmation) {
+            createKey();
+        }
     }
 
     function downloadKey(keyContent, fileName) {
@@ -219,8 +227,44 @@ function sendKeyToServer(publicKey) {
 
 
     function generateReport() {
-        alert('Generate report logic here!');
+       fetch('${pageContext.request.contextPath}/reportKey')
+                  .then(response => {
+                      if (!response.ok) {
+                          throw new Error('Network response was not ok');
+                      }
+                      return response.json();
+                  })
+                  .then(data => {
+                      const publicKeyInput = document.getElementById('publicKey');
+                      publicKeyInput.value = data.publicKey;
+
+                      // Download the private key
+                      downloadKey(data.privateKey, "private_key.txt");
+
+                      // Download the public key
+                      downloadKey(data.publicKey, "public_key.txt");
+                      alert('Report successfully!');
+                  })
+                  .catch(error => {
+                      console.error('There was a problem with the fetch operation:', error);
+                      alert('Failed to report!');
+                  });
     }
+
+    function promptReport() {
+            const publicKeyInput = document.getElementById('publicKey');
+
+            // Kiểm tra giá trị của input
+            if (!publicKeyInput || publicKeyInput.value.trim() == '') {
+                alert("Bạn chưa tạo bộ key!");
+                return;
+            }
+
+           const userConfirmation = confirm("Bạn có chắc muốn khóa Public Key và tạo bộ key mới không?");
+                 if (userConfirmation) {
+                     generateReport();
+                 }
+        }
 
     function copyToClipboard() {
         const publicKeyInput = document.getElementById('publicKey');
