@@ -57,15 +57,16 @@ public class KeyDAO {
         return publicKeys;
     }
 
-    public boolean updateKey(PublicKey publicKey) {
-        String sql = "UPDATE public_key SET  status = ?, reportTime = ? WHERE user_id = ?";
+    public boolean updateKey(PublicKey publicKey, String status) {
+        String sql = "UPDATE public_key SET  status = ?, reportTime = ? WHERE user_id = ? AND status = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Thiết lập giá trị cho các tham số
-            stmt.setString(1, publicKey.getStatus());
+            stmt.setString(1, status);
             stmt.setTimestamp(2, publicKey.getReportTime());
             stmt.setInt(3, publicKey.getUserId());
+            stmt.setString(4, publicKey.getStatus());
 
             // Thực thi câu lệnh
             int rowsAffected = stmt.executeUpdate();

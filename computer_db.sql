@@ -129,6 +129,9 @@ CREATE TABLE IF NOT EXISTS public_key (
     reportTime TIMESTAMP NULL DEFAULT NULL
 );
 
+ALTER TABLE public_key AUTO_INCREMENT = 1;
+
+
 
 -- Đặt thời gian cho endTime 
 DELIMITER $$

@@ -28,17 +28,17 @@ public class UploadKeyServlet extends HttpServlet {
             HttpSession session = request.getSession(false);
             User user = (User) session.getAttribute("user");
 
-            if (user == null || publicKey == null || publicKey.trim().isEmpty()) {
+            if (user == null || publicKey.trim().isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 
             KeyDAO keyDAO = new KeyDAO();
             // Disable old keys
-            List<PublicKey> publicKeys = keyDAO.getPublicKeyByUserIdAndStatus(user.getUserId(), "Enabled");
-            for (PublicKey oldKey : publicKeys) {
-                oldKey.setStatus("Disabled");
-                keyDAO.updateKey(oldKey);
+            List<PublicKey> publicKeyList = keyDAO.getPublicKeyByUserIdAndStatus(user.getUserId(), "Enabled");
+            if(!publicKeyList.isEmpty()) {
+                PublicKey oldKey = publicKeyList.get(0);
+                keyDAO.updateKey(oldKey, "Disabled");
             }
 
             // Add new key
