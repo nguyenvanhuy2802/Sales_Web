@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet("/generateKey")
 public class GenerateKeyServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             ElectronicSignature.genDSAKey();
             String publicKeyBase64 = Base64.getEncoder().encodeToString(ElectronicSignature.getPublicKeyDSA().getEncoded());

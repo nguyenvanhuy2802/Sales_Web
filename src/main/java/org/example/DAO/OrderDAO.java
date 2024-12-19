@@ -1,30 +1,31 @@
 package org.example.DAO;
 
-// OrderDAO.java
-
 import org.example.jdbc.DBConnection;
 import org.example.model.Order;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 public class OrderDAO {
-    // OrderDAO.java
+    // Thêm đơn hàng mới và trả về ID đơn hàng
     public int addOrderId(Order order) {
-        String sql = "INSERT INTO orders (customer_id, total_amount) VALUES (?, ?)";
+        String sql = "INSERT INTO orders (customer_id, buyer_name, total_amount, delivery_address, hash_code) VALUES (?, ?, ?, ?, ?)";
         int generatedOrderId = -1;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            // Thiết lập các giá trị cho tham số
             stmt.setInt(1, order.getCustomerId());
-            stmt.setBigDecimal(2, order.getTotalAmount());
+            stmt.setString(2, order.getBuyerName());
+            stmt.setBigDecimal(3, order.getTotalAmount());
+            stmt.setString(4, order.getDeliveryAddress());
+            stmt.setString(5, order.getHashCode());
 
             stmt.executeUpdate();
 
-            // Retrieve generated order ID
+            // Lấy ID đơn hàng được tự động sinh
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 generatedOrderId = rs.getInt(1);
@@ -34,28 +35,6 @@ public class OrderDAO {
         }
 
         return generatedOrderId;
-    }
-
-    // Thêm đơn hàng mới
-    public void addOrder(Order order) {
-        String sql = "INSERT INTO orders (customer_id, status, total_amount) VALUES (?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setInt(1, order.getCustomerId());
-            stmt.setString(2, order.getStatus());
-            stmt.setBigDecimal(3, order.getTotalAmount());
-
-            stmt.executeUpdate();
-
-            // Lấy order_id được tạo tự động
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                order.setOrderId(rs.getInt(1));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     // Lấy đơn hàng theo ID
@@ -72,9 +51,13 @@ public class OrderDAO {
                 order = new Order();
                 order.setOrderId(rs.getInt("order_id"));
                 order.setCustomerId(rs.getInt("customer_id"));
+                order.setBuyerName(rs.getString("buyer_name"));
                 order.setOrderDate(rs.getTimestamp("order_date"));
                 order.setStatus(rs.getString("status"));
                 order.setTotalAmount(rs.getBigDecimal("total_amount"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setHashCode(rs.getString("hash_code"));
+                order.setIsVerified(rs.getInt("is_verified"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -95,9 +78,13 @@ public class OrderDAO {
                 Order order = new Order();
                 order.setOrderId(rs.getInt("order_id"));
                 order.setCustomerId(rs.getInt("customer_id"));
+                order.setBuyerName(rs.getString("buyer_name"));
                 order.setOrderDate(rs.getTimestamp("order_date"));
                 order.setStatus(rs.getString("status"));
                 order.setTotalAmount(rs.getBigDecimal("total_amount"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setHashCode(rs.getString("hash_code"));
+                order.setIsVerified(rs.getInt("is_verified"));
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -108,23 +95,26 @@ public class OrderDAO {
 
     // Cập nhật thông tin đơn hàng
     public boolean updateOrder(Order order) {
-        String sql = "UPDATE orders SET customer_id = ?, status = ?, total_amount = ? WHERE order_id = ?";
+        String sql = "UPDATE orders SET customer_id = ?, buyer_name = ?, status = ?, total_amount = ?, delivery_address = ?, hash_code = ?, is_verified = ? WHERE order_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, order.getCustomerId());
-            stmt.setString(2, order.getStatus());
-            stmt.setBigDecimal(3, order.getTotalAmount());
-            stmt.setInt(4, order.getOrderId());
+            stmt.setString(2, order.getBuyerName());
+            stmt.setString(3, order.getStatus());
+            stmt.setBigDecimal(4, order.getTotalAmount());
+            stmt.setString(5, order.getDeliveryAddress());
+            stmt.setString(6, order.getHashCode());
+            stmt.setInt(7, order.getIsVerified());
+            stmt.setInt(8, order.getOrderId());
 
-            // Execute the update and check if any rows were affected
+            // Thực hiện cập nhật và kiểm tra số hàng bị ảnh hưởng
             int rowsAffected = stmt.executeUpdate();
 
-            // If at least one row was affected, return true (update successful)
+            // Nếu ít nhất một hàng bị ảnh hưởng, trả về true (cập nhật thành công)
             return rowsAffected > 0;
         } catch (SQLException e) {
-            // Handle exceptions and return false in case of errors
-            e.printStackTrace(); // Log the exception (optional)
+            e.printStackTrace(); // Log ngoại lệ (tùy chọn)
             return false;
         }
     }
@@ -141,4 +131,61 @@ public class OrderDAO {
             throw new RuntimeException(e);
         }
     }
+
+    // Lấy danh sách đơn hàng theo trạng thái xác thực
+    public List<Order> getOrdersByVerificationStatus(int isVerified) {
+        String sql = "SELECT * FROM orders WHERE is_verified = ?";
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, isVerified);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setCustomerId(rs.getInt("customer_id"));
+                order.setBuyerName(rs.getString("buyer_name"));
+                order.setOrderDate(rs.getTimestamp("order_date"));
+                order.setStatus(rs.getString("status"));
+                order.setTotalAmount(rs.getBigDecimal("total_amount"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setHashCode(rs.getString("hash_code"));
+                order.setIsVerified(rs.getInt("is_verified"));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return orders;
+    }
+
+    // Lấy chỉ số AUTO_INCREMENT hiện tại của bảng orders
+    public int getCurrentAutoIncrementOrderId() {
+        String sql = "SELECT AUTO_INCREMENT " +
+                "FROM information_schema.TABLES " +
+                "WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+        int autoIncrementId = -1;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Thay thế tham số với tên cơ sở dữ liệu và bảng
+            stmt.setString(1, conn.getCatalog()); // Tên cơ sở dữ liệu
+            stmt.setString(2, "orders"); // Tên bảng
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                autoIncrementId = rs.getInt("AUTO_INCREMENT");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return autoIncrementId;
+    }
+
 }

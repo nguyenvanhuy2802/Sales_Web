@@ -38,13 +38,16 @@ CREATE TABLE IF NOT EXISTS products (
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
--- Tạo bảng đơn hàng
 CREATE TABLE IF NOT EXISTS orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
+    buyer_name VARCHAR(100), -- Tên người mua
+    delivery_address VARCHAR(255) NOT NULL,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50) DEFAULT 'pending',
     total_amount DECIMAL(10, 2),
+    is_verified TINYINT DEFAULT 0, -- 0: chưa thể xác minh, 1: xác minh hợp lệ, 2: xác minh không hợp lệ
+    hash_code VARCHAR(1000) NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES users(user_id)
 );
 
@@ -70,16 +73,6 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
--- Tạo bảng giao hàng
-CREATE TABLE IF NOT EXISTS shipping (
-    shipping_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    shipping_address VARCHAR(255) NOT NULL,
-    shipping_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- ngày giao hàng mặc định là thời điểm hiện tại
-    delivery_date TIMESTAMP NULL, -- giá trị mặc định là NULL
-    status VARCHAR(50) DEFAULT 'pending',
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
-);
 
 -- Tạo bảng giỏ hàng
 CREATE TABLE IF NOT EXISTS carts (
@@ -101,23 +94,15 @@ CREATE TABLE IF NOT EXISTS cart_items (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
--- Tạo bảng danh sách yêu thích
-CREATE TABLE IF NOT EXISTS wishlist (
-    wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES users(user_id)
+
+CREATE TABLE IF NOT EXISTS signature (
+    sign_id INT AUTO_INCREMENT PRIMARY KEY,
+    sign_value TEXT NOT NULL,
+    order_id INT NOT NULL,
+    sign_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
 
--- Tạo bảng sản phẩm trong danh sách yêu thích
-CREATE TABLE IF NOT EXISTS wishlist_items (
-    wishlist_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    wishlist_id INT,
-    product_id INT,
-    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (wishlist_id) REFERENCES wishlist(wishlist_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
-);
 
 CREATE TABLE IF NOT EXISTS public_key (
     key_id INT AUTO_INCREMENT PRIMARY KEY, 

@@ -173,7 +173,7 @@ public class ElectronicSignature {
 
 
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException {
         genDSAKey();
         String publicKeyBase64 = Base64.getEncoder().encodeToString(publicKeyDSA.getEncoded());
         String privateKeyBase64 = Base64.getEncoder().encodeToString(privateKeyDSA.getEncoded());
