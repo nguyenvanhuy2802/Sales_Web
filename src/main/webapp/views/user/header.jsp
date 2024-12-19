@@ -43,7 +43,7 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <!-- Form Tìm Kiếm -->
                     <li class="nav-item me-3">
-                        <form class="d-flex" action="search" method="get">
+                        <form class="d-flex" action="#" method="get">
                             <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm" name="query" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                         </form>
@@ -102,7 +102,7 @@
                                     ${user.name}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Hồ sơ</a></li>
+                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/keyManagement">Quản lý key</a></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>

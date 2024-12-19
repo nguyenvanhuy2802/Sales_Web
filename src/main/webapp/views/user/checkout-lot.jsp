@@ -28,6 +28,7 @@
                                 <img src="${pageContext.request.contextPath}${item.product.productImage}" alt="${item.product.name}" style="width:50px; height:50px; object-fit: cover; margin-right: 10px;">
                                 ${item.product.name}
                                 <!-- Các trường ẩn để gửi dữ liệu -->
+                                <input type="hidden" name="productNames" value="${item.product.name}">
                                 <input type="hidden" name="productIds" value="${item.product.productId}">
                                 <input type="hidden" name="cartItemIds" value="${item.cartItem.cartItemId}">
                             </td>
@@ -59,8 +60,8 @@
             <div class="mt-4">
                 <!-- Họ và Tên -->
                 <div class="mb-3">
-                    <label for="fullname" class="form-label">Họ và Tên</label>
-                    <input type="text" class="form-control" id="fullname" name="fullname"
+                    <label for="fullName" class="form-label">Họ và Tên</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName"
                            value="${not empty user ? fn:escapeXml(user.name) : ''}" required>
                 </div>
 

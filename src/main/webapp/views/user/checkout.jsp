@@ -38,15 +38,16 @@
                 </div>
             </c:if>
             <form id="checkoutForm" action="${pageContext.request.contextPath}/checkout" method="post">
-            <input type="hidden" name="productId" value="${product.productId}">
+                <input type="hidden" name="productId" value="${product.productId}">
+                <input type="hidden" name="productName" value="${product.name}">
                 <input type="hidden" name="unitPrice" value="${product.price}">
                 <input type="hidden" name="quantity" id="hiddenQuantity" value="${quantity}">
                 <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="${product.price * quantity}">
 
                 <!-- Họ và Tên -->
                 <div class="mb-3">
-                    <label for="fullname" class="form-label">Họ và Tên</label>
-                    <input type="text" class="form-control" id="fullname" name="fullname"
+                    <label for="fullName" class="form-label">Họ và Tên</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName"
                         value="${not empty user ? fn:escapeXml(user.name) : ''}" required>
                 </div>
 
@@ -78,9 +79,6 @@
                         <option value="paypal">PayPal</option>
                     </select>
                 </div>
-
-                <!-- Các trường ẩn cho sản phẩm -->
-                <input type="hidden" name="productId" value="${product.productId}">
 
                 <!-- Nút Xác Nhận Thanh Toán -->
                 <button type="submit" class="btn btn-primary">Xác nhận thanh toán</button>
