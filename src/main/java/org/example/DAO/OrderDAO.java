@@ -133,6 +133,37 @@ public class OrderDAO {
     }
 
     // Lấy danh sách đơn hàng theo trạng thái xác thực
+    public List<Order> getOrdersByStatus(String status) {
+        String sql = "SELECT * FROM orders WHERE status = ?";
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setCustomerId(rs.getInt("customer_id"));
+                order.setBuyerName(rs.getString("buyer_name"));
+                order.setOrderDate(rs.getTimestamp("order_date"));
+                order.setStatus(rs.getString("status"));
+                order.setTotalAmount(rs.getBigDecimal("total_amount"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setHashCode(rs.getString("hash_code"));
+                order.setIsVerified(rs.getInt("is_verified"));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return orders;
+    }
+
+    // Lấy danh sách đơn hàng theo trạng thái xác thực
     public List<Order> getOrdersByVerificationStatus(int isVerified) {
         String sql = "SELECT * FROM orders WHERE is_verified = ?";
         List<Order> orders = new ArrayList<>();
