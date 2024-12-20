@@ -74,13 +74,18 @@ public class CountFilter implements Filter {
                     }
 
                     session.setAttribute("orderCount", orderCount);
+                    session.setAttribute("notificationCount", orderCount);
+
                 } else {
                     session.setAttribute("orderCount", 0);
+                    session.setAttribute("notificationCount", 0);
                 }
 
             } else {
                 session.setAttribute("cartItemCount", 0);
                 session.setAttribute("orderCount", 0);
+                session.setAttribute("notificationCount", 0);
+
             }
         }
 

@@ -111,5 +111,19 @@ $(document).ready(function() {
      }
  });
 
+  $(document).on("click", ".copy-hash-btn", function () {
+        const hashCode = $(this).data("hashcode");
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(hashCode).then(() => {
+            // Show toast notification
+            $("#toastMessage").text("Lấy mã hash thành công!");
+            const toastElement = new bootstrap.Toast($("#successToast"), { delay: 1000 }); // Hiển thị trong 1 giây
+            toastElement.show();
+        }).catch(err => {
+            console.error("Failed to copy hash code: ", err);
+        });
+    });
+
 
 });

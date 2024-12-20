@@ -19,6 +19,8 @@
     <!-- Favicon -->
     <link rel="icon" href="${pageContext.request.contextPath}/images/computer.png" type="image/png">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/headerstyles.css">
 
 </head>
@@ -95,19 +97,32 @@
 
                     <!-- Đăng Nhập/Đăng Xuất -->
                     <c:choose>
-                        <c:when test="${not empty user}">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                       <c:when test="${not empty user}">
+                           <li class="nav-item dropdown">
+                               <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                    <img src="${pageContext.request.contextPath}${user.profileImage}" alt="User Avatar" class="user-avatar me-2">
-                                    ${user.name}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/keyManagement">Quản lý key</a></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
-                                </ul>
-                            </li>
-                        </c:when>
+                                   ${user.name}
+                               </a>
+                               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                   <li>
+                                       <a class="dropdown-item d-flex align-items-center" href="#">
+                                           <i class="bi bi-person-circle me-2"></i> Hồ sơ
+                                       </a>
+                                   </li>
+                                   <li>
+                                       <a class="dropdown-item d-flex align-items-center" href="${pageContext.request.contextPath}/keyManagement">
+                                           <i class="bi bi-key me-2"></i> Quản lý key
+                                       </a>
+                                   </li>
+                                   <li>
+                                       <a class="dropdown-item d-flex align-items-center" href="${pageContext.request.contextPath}/logout">
+                                           <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                                       </a>
+                                   </li>
+                               </ul>
+                           </li>
+                       </c:when>
+
                         <c:otherwise>
                             <li class="nav-item me-3">
                                 <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/views/user/login.jsp">Đăng nhập</a>

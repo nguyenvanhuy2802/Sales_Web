@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb shadow-sm bg-light p-3 rounded">
@@ -14,7 +13,18 @@
 
 <div class="content-wrapper">
     <div class="container mt-5">
-        <h1 class="mb-4">Đơn Hàng Của Bạn</h1>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1>
+            Đơn Hàng Của Bạn
+        </h1>
+     <div class="notification-icon position-relative">
+         <i class="bi bi-bell-fill fs-3"></i>
+         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+             ${notificationCount}
+         </span>
+     </div>
+    </div>
+
 
         <!-- Tab navigation -->
         <ul class="nav nav-tabs" id="orderTab" role="tablist">
@@ -65,6 +75,22 @@
                                         <button class="btn btn-danger btn-sm cancel-order-btn" data-order-id="${order.orderId}">
                                             <i class="bi bi-x-circle"></i> Hủy Đơn Hàng
                                         </button>
+                                      <button class="btn btn-success btn-sm copy-hash-btn" data-order-id="${order.orderId}" data-hashcode="${order.hashCode}">
+                                          <i class="bi bi-clipboard"></i> Coppy hash
+                                      </button>
+
+
+                                     <!-- Toast Notification -->
+                                     <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                                         <div id="successToast" class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+                                             <div class="d-flex">
+                                                 <div class="toast-body" id="toastMessage"></div>
+                                                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                             </div>
+                                         </div>
+                                     </div>
+
+
                                     </td>
                                 </tr>
                                  <tr id="orderDetails${order.orderId}" class="collapse">
@@ -176,8 +202,28 @@
                 <i class="bi bi-house-door-fill"></i> Quay lại Trang Chủ
             </a>
         </div>
+
     </div>
 </div>
 
+<!-- Modal thông báo -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Thông báo đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" id="notificationList">
+                    <!-- Các đơn hàng sẽ được thêm vào đây -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/showNotifications.js"></script>
 <script src="${pageContext.request.contextPath}/js/orderDetails.js"></script>
 <%@ include file="footer.jsp" %>

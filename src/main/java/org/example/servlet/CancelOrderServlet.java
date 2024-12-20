@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.example.DAO.OrderDAO;
 import org.example.DAO.OrderItemDAO;
 import org.example.model.Order;
-import org.example.model.OrderItemDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/cancel-order")
 public class CancelOrderServlet extends HttpServlet {

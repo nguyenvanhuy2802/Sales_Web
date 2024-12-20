@@ -1,8 +1,5 @@
 package org.example.DAO;
 
-// OrderItemDAO.java
-import org.example.jdbc.DBConnection;
-import org.example.model.Order;
 import org.example.model.OrderItem;
 import org.example.model.OrderItemDTO;
 
