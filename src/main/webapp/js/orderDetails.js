@@ -118,7 +118,7 @@ $(document).ready(function() {
         navigator.clipboard.writeText(hashCode).then(() => {
             // Show toast notification
             $("#toastMessage").text("Lấy mã hash thành công!");
-            const toastElement = new bootstrap.Toast($("#successToast"), { delay: 1000 }); // Hiển thị trong 1 giây
+            const toastElement = new bootstrap.Toast($("#successToast"), { delay: 800 }); // Hiển thị trong 1 giây
             toastElement.show();
         }).catch(err => {
             console.error("Failed to copy hash code: ", err);
