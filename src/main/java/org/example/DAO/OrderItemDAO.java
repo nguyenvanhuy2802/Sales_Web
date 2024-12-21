@@ -1,5 +1,6 @@
 package org.example.DAO;
 
+import org.example.jdbc.DBConnection;
 import org.example.model.OrderItem;
 import org.example.model.OrderItemDTO;
 
@@ -159,4 +160,30 @@ public class OrderItemDAO {
         }
         return orderItems;
     }
+
+    // Lấy chỉ số AUTO_INCREMENT hiện tại của bảng order_items
+    public int getCurrentAutoIncrementOrderItemId() {
+        String sql = "SELECT AUTO_INCREMENT " +
+                "FROM information_schema.TABLES " +
+                "WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+        int autoIncrementId = -1;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Thay thế tham số với tên cơ sở dữ liệu và bảng
+            stmt.setString(1, conn.getCatalog()); // Tên cơ sở dữ liệu
+            stmt.setString(2, "order_items"); // Tên bảng
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                autoIncrementId = rs.getInt("AUTO_INCREMENT");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return autoIncrementId;
+    }
+
 }
