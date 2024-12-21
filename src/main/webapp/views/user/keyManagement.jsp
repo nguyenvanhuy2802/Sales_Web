@@ -76,6 +76,15 @@
     </div>
 </div>
 
+    <!-- Toast Notification -->
+     <div class="toast-container position-fixed bottom-0 end-0 p-3">
+         <div id="successToast" class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+             <div class="d-flex">
+                 <div class="toast-body" id="toastMessage"></div>
+                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+             </div>
+         </div>
+     </div>
 
 <script>
     function createKey() {
@@ -266,16 +275,28 @@ function sendKeyToServer(publicKey) {
                  }
         }
 
-    function copyToClipboard() {
-        const publicKeyInput = document.getElementById('publicKey');
-        publicKeyInput.select();
-        publicKeyInput.setSelectionRange(0, 99999); // For mobile devices
-        navigator.clipboard.writeText(publicKeyInput.value).then(() => {
-            alert('Public key copied to clipboard!');
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-        });
-    }
+function copyToClipboard() {
+    const publicKeyInput = document.getElementById('publicKey');
+    publicKeyInput.select();
+    publicKeyInput.setSelectionRange(0, 99999); // For mobile devices
+
+    navigator.clipboard.writeText(publicKeyInput.value).then(() => {
+        showToast("Public key copied to clipboard!");
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+function showToast(message) {
+    const toastMessage = document.getElementById('toastMessage');
+    toastMessage.textContent = message;
+
+const successToast = new bootstrap.Toast(document.getElementById('successToast'), {
+        delay: 800 // Time in milliseconds before the toast disappears
+    });
+    successToast.show();
+}
+
 </script>
 
 <%@ include file="footer.jsp" %>

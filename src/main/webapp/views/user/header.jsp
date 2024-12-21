@@ -114,6 +114,12 @@
                                            <i class="bi bi-key me-2"></i> Quản lý key
                                        </a>
                                    </li>
+                               <li>
+                                   <a class="dropdown-item d-flex align-items-center" href="${pageContext.request.contextPath}/toolManagement">
+                                       <i class="bi bi-tools me-2"></i> Quản lý tool
+                                   </a>
+                               </li>
+
                                    <li>
                                        <a class="dropdown-item d-flex align-items-center" href="${pageContext.request.contextPath}/logout">
                                            <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
