@@ -60,7 +60,12 @@ public class CheckoutLotServlet extends HttpServlet {
 
         //Lấy thông tin đơn hàng
         int orderId = orderDAO.getCurrentAutoIncrementOrderId();
-        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalPrice, productIds, productNames, quantities, unitPrices );
+        int currentOrderItemId = orderItemDAO.getCurrentAutoIncrementOrderItemId();
+        String[] orderItemIds = new String[productIds.length];
+        for (int i = 0; i < productIds.length ; i++) {
+            orderItemIds[i] = String.valueOf(currentOrderItemId + i);
+        }
+        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalPrice, orderItemIds, productNames, quantities, unitPrices );
         System.out.println("Thong tin don hang la: " +orderInfor);
         String hashCode = "";
         try {

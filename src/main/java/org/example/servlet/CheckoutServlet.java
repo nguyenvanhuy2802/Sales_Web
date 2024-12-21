@@ -58,15 +58,16 @@ public class CheckoutServlet extends HttpServlet {
 
         //Lấy thông tin đơn hàng
         int orderId = orderDAO.getCurrentAutoIncrementOrderId();
-        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalAmount, String.valueOf(productId), productName, String.valueOf(quantity), String.valueOf(unitPrice));
-        System.out.println("Thong tin don hang la: " + orderInfor);
+        int orderItemId = orderItemDAO.getCurrentAutoIncrementOrderItemId();
+        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalAmount, String.valueOf(orderItemId), productName, String.valueOf(quantity), String.valueOf(unitPrice));
+        System.out.println("Thong tin don hang (checkout)la: " + orderInfor);
         String hashCode = "";
         try {
             hashCode = Hash.hash(orderInfor);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Gia tri hash la: " + hashCode);
+        System.out.println("Gia tri hash (checkout)la: " + hashCode);
         // Thêm order mới và các orderItems
         int newOrderId = orderDAO.addOrderId(new Order(user.getUserId(), fullName, totalAmount, address, hashCode));
 
