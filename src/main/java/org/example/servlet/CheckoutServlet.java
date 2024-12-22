@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
@@ -59,7 +60,9 @@ public class CheckoutServlet extends HttpServlet {
         //Lấy thông tin đơn hàng
         int orderId = orderDAO.getCurrentAutoIncrementOrderId();
         int orderItemId = orderItemDAO.getCurrentAutoIncrementOrderItemId();
-        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalAmount, String.valueOf(orderItemId), productName, String.valueOf(quantity), String.valueOf(unitPrice));
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        String formatTotalAmout = decimalFormat.format(totalAmount);
+        String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, formatTotalAmout, String.valueOf(orderItemId), productName, String.valueOf(quantity), String.valueOf(unitPrice));
         System.out.println("Thong tin don hang (checkout)la: " + orderInfor);
         String hashCode = "";
         try {
@@ -69,6 +72,7 @@ public class CheckoutServlet extends HttpServlet {
         }
         System.out.println("Gia tri hash (checkout)la: " + hashCode);
         // Thêm order mới và các orderItems
+
         int newOrderId = orderDAO.addOrderId(new Order(user.getUserId(), fullName, totalAmount, address, hashCode));
 
         // Create and save the order item
@@ -79,7 +83,7 @@ public class CheckoutServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/orders");
     }
 
-    private String getOrderInformation(int orderId, String buyerName, String address, String orderDate, BigDecimal totalPrice, String productId, String productName, String quantity, String unitPrice) {
+    private String getOrderInformation(int orderId, String buyerName, String address, String orderDate, String totalPrice, String productId, String productName, String quantity, String unitPrice) {
         StringBuilder builder = new StringBuilder();
         builder.append(orderId).append(", ")
                 .append(buyerName).append(", ")
