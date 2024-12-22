@@ -66,14 +66,14 @@ public class CheckoutLotServlet extends HttpServlet {
             orderItemIds[i] = String.valueOf(currentOrderItemId + i);
         }
         String orderInfor = getOrderInformation(orderId, fullName, address, formattedTime, totalPrice, orderItemIds, productNames, quantities, unitPrices );
-        System.out.println("Thong tin don hang la: " +orderInfor);
+        System.out.println("Thong tin don hang la(check-lot-out): " +orderInfor);
         String hashCode = "";
         try {
              hashCode = Hash.hash(orderInfor);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Gia tri hash la: " + hashCode);
+        System.out.println("Gia tri hash la(check-lot-out): " + hashCode);
         // Thêm order mới và các orderItems
         int newOrderId = orderDAO.addOrderId(new Order(user.getUserId(),fullName,  totalPrice, address, hashCode));
         for (int i = 0; i < productIds.length; i++) {

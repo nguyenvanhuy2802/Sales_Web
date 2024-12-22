@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,15 +70,16 @@ public class OrderServlet extends HttpServlet {
                         String[] productNames = new String[size];
                         String[] quantities = new String[size];
                         String[] unitPrices = new String[size];
-                        for (OrderItemDTO orderItem : orderItemList) {
                             for (int i = 0; i < size; i++) {
-                                productIds[i] = String.valueOf(orderItem.getOrderItemId());
-                                productNames[i] = orderItem.getProductName();
-                                quantities[i] = String.valueOf(orderItem.getQuantity());
-                                unitPrices[i] = String.valueOf(orderItem.getPrice());
+                                productIds[i] = String.valueOf(orderItemList.get(i).getOrderItemId());
+                                productNames[i] = orderItemList.get(i).getProductName();
+                                quantities[i] = String.valueOf(orderItemList.get(i).getQuantity());
+                                unitPrices[i] = String.valueOf(orderItemList.get(i).getPrice());
                             }
-                        }
-                        orderInfor = getOrderInformation(currentOrder.getOrderId(), currentOrder.getBuyerName(), currentOrder.getDeliveryAddress(), String.valueOf(currentOrder.getOrderDate()), currentOrder.getTotalAmount(), productIds, productNames, quantities, unitPrices);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String formattedTime = sdf.format(currentOrder.getOrderDate());
+                        orderInfor = getOrderInformation(currentOrder.getOrderId(), currentOrder.getBuyerName(), currentOrder.getDeliveryAddress(),formattedTime , currentOrder.getTotalAmount(), productIds, productNames, quantities, unitPrices);
                         System.out.println("Thong tin don hang la: " + orderInfor);
                     }
 
@@ -88,13 +90,10 @@ public class OrderServlet extends HttpServlet {
                         throw new RuntimeException(e);
                     }
                     System.out.println("Gia tri hash la: " + hashCode);
-                    System.out.println("Có cái nit");
                     Signature signature = signatures.get(0);
-                    System.out.println("Có cái nit");
 
                     KeyDAO publiKeyDA0 = new KeyDAO();
                     List<PublicKey> publicKeyList = publiKeyDA0.getPublicKeyByUserIdAndStatus(user.getUserId(), "Enabled");
-                    System.out.println("Có cái nit");
                     if (!publicKeyList.isEmpty()) {
                         PublicKey publicKey = publicKeyList.get(0);
                         boolean result = false;
