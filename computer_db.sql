@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     address VARCHAR(255),
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(512) NOT NULL,
     role ENUM('customer', 'admin') NOT NULL DEFAULT 'customer',
     profile_image VARCHAR(255), -- Cột để lưu ảnh người dùng
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

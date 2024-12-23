@@ -3,6 +3,7 @@ package org.example.servlet;
 
 import org.example.DAO.UserDAO;
 import org.example.model.User;
+import org.example.utils.RSAUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,30 +42,43 @@ public class LoginServlet extends HttpServlet {
                 currentUser = user;
             }
         }
-        if (currentUser != null && currentUser.getPassword().equals(password)) {
-            // Đăng nhập thành công
-            HttpSession session = request.getSession();
-            session.setAttribute("user", currentUser);
+        if (currentUser != null) {
+            try {
+                // Giải mã mật khẩu trong cơ sở dữ liệu bằng khóa riêng RSA
+                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
 
-            // Xử lý tham số redirect
-            String redirect = request.getParameter("redirect");
-            String id = request.getParameter("id");
-            if (redirect != null) {
-                String redirectURL = switch (redirect) {
-                    case "cart" -> "/cart";
-                    case "orders" -> "/orders";
-                    case "buyNow" -> "/buyNow?id=" + URLEncoder.encode(id, "UTF-8");
-                    case "addToCart" -> "/addToCart?id=" + URLEncoder.encode(id, "UTF-8");
-                    default -> "/product";
-                };
-                response.sendRedirect(request.getContextPath() + redirectURL);
-            } else {
-                response.sendRedirect(request.getContextPath() + "/product");
+                if (decryptedPassword.equals(password)) {
+                    // Đăng nhập thành công
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", currentUser);
+
+                    // Xử lý tham số redirect
+                    String redirect = request.getParameter("redirect");
+                    String id = request.getParameter("id");
+                    if (redirect != null) {
+                        String redirectURL = switch (redirect) {
+                            case "cart" -> "/cart";
+                            case "orders" -> "/orders";
+                            case "buyNow" -> "/buyNow?id=" + URLEncoder.encode(id, "UTF-8");
+                            case "addToCart" -> "/addToCart?id=" + URLEncoder.encode(id, "UTF-8");
+                            default -> "/product";
+                        };
+                        response.sendRedirect(request.getContextPath() + redirectURL);
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/product");
+                    }
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("message", "Lỗi xử lý mật khẩu. Vui lòng thử lại.");
+                request.getRequestDispatcher("views/user/login.jsp").forward(request, response);
+                return;
             }
-        } else {
-            // Đăng nhập thất bại
-            request.setAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng.");
-            request.getRequestDispatcher("views/user/login.jsp").forward(request, response);
         }
+
+        // Đăng nhập thất bại
+        request.setAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng.");
+        request.getRequestDispatcher("views/user/login.jsp").forward(request, response);
     }
 }

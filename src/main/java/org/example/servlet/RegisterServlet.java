@@ -8,6 +8,7 @@ import org.example.DAO.CartDAO;
 import org.example.DAO.UserDAO;
 import org.example.model.Cart;
 import org.example.model.User;
+import org.example.utils.RSAUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.List;
 
 @WebServlet("/register")
@@ -107,11 +109,13 @@ public class RegisterServlet extends HttpServlet {
                 request.getRequestDispatcher("/views/user/register.jsp").forward(request, response);
             }
         }
+        PublicKey publicKey = RSAUtil.getPublicKey(); // Lấy khóa công khai RSA
+        String encryptedPassword = RSAUtil.encrypt(password, publicKey); // Mã hóa mật khẩu
 
         // Tạo người dùng, giỏ hàng
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(password);
+        newUser.setPassword(encryptedPassword); // Lưu mật khẩu đã mã hóa
         newUser.setName(fullName);
         newUser.setEmail(email);
         newUser.setPhone(phone);
