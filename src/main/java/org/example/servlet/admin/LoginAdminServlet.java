@@ -3,6 +3,7 @@ package org.example.servlet.admin;
 
 import org.example.DAO.UserDAO;
 import org.example.model.User;
+import org.example.utils.RSAUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,16 +36,28 @@ public class LoginAdminServlet extends HttpServlet {
                 currentUser = user;
             }
         }
-        if (currentUser != null && currentUser.getPassword().equals(password) && currentUser.getRole().equalsIgnoreCase("admin")) {
-            // Đăng nhập thành công
-            HttpSession session = request.getSession();
-            session.setAttribute("admin", currentUser);
-            response.sendRedirect(request.getContextPath() + "/homeAdmin");
+        if (currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole())) {
+            try {
+                // Giải mã mật khẩu được lưu trong cơ sở dữ liệu bằng RSA
+                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
 
-        } else {
-            // Đăng nhập thất bại
-            request.setAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng.");
-            request.getRequestDispatcher("views/admin/adminLogin.jsp").forward(request, response);
+                if (decryptedPassword.equals(password)) {
+                    // Đăng nhập thành công
+                    HttpSession session = request.getSession();
+                    session.setAttribute("admin", currentUser);
+                    response.sendRedirect(request.getContextPath() + "/homeAdmin");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("message", "Lỗi xử lý mật khẩu. Vui lòng thử lại.");
+                request.getRequestDispatcher("views/admin/adminLogin.jsp").forward(request, response);
+                return;
+            }
         }
+
+        // Đăng nhập thất bại
+        request.setAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng.");
+        request.getRequestDispatcher("views/admin/adminLogin.jsp").forward(request, response);
     }
 }
