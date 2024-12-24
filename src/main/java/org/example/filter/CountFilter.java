@@ -4,10 +4,8 @@ package org.example.filter;
 import org.example.DAO.CartDAO;
 import org.example.DAO.CartItemDAO;
 import org.example.DAO.OrderDAO;
-import org.example.model.CartItem;
-import org.example.model.Order;
-import org.example.model.User;
-import org.example.model.Cart;
+import org.example.DAO.SignatureDAO;
+import org.example.model.*;
 
 
 import javax.servlet.*;
@@ -65,21 +63,41 @@ public class CountFilter implements Filter {
 
                 OrderDAO orderDAO = new OrderDAO();
                 List<Order> orderList = orderDAO.getAllOrders();
+                SignatureDAO signatureDAO = new SignatureDAO();
+               
                 if (!orderList.isEmpty()) {
                     int orderCount = 0;
+                    int notificationCount = 0;
+                    int notificationAdminCount = 0;
                     for (Order order : orderList) {
                         if (order.getCustomerId() == user.getUserId() && order.getStatus().equalsIgnoreCase("pending")) {
                             orderCount += 1;
+                            List<Signature> signatureList = signatureDAO.getSignaturesByOrderId(order.getOrderId());
+                            if(!signatureList.isEmpty() ){
+                                notificationCount += 1;
+                            }
                         }
+                        if(order.getStatus().equalsIgnoreCase("pending")){
+                            List<Signature> signatureList = signatureDAO.getSignaturesByOrderId(order.getOrderId());
+                            if(!signatureList.isEmpty() ){
+                                notificationAdminCount += 1;
+                            }
+                        }
+
                     }
 
                     session.setAttribute("orderCount", orderCount);
-                    session.setAttribute("notificationCount", orderCount);
+                    session.setAttribute("notificationCount", notificationCount);
+                    session.setAttribute("notificationAdminCount", notificationAdminCount);
 
                 } else {
                     session.setAttribute("orderCount", 0);
                     session.setAttribute("notificationCount", 0);
+                    session.setAttribute("notificationAdminCount", 0);
                 }
+
+
+                
 
             } else {
                 session.setAttribute("cartItemCount", 0);

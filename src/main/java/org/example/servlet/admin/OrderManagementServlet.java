@@ -1,9 +1,7 @@
 package org.example.servlet.admin;
 
 import org.example.DAO.OrderDAO;
-import org.example.DAO.ProductDAO;
 import org.example.model.Order;
-import org.example.model.Product;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
