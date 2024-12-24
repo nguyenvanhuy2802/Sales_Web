@@ -8,7 +8,7 @@ import org.example.DAO.CartDAO;
 import org.example.DAO.UserDAO;
 import org.example.model.Cart;
 import org.example.model.User;
-import org.example.utils.RSAUtil;
+import org.example.utils.PasswordUltil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +26,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("views/user/register.jsp").forward(req, resp);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = null;
@@ -109,13 +110,12 @@ public class RegisterServlet extends HttpServlet {
                 request.getRequestDispatcher("/views/user/register.jsp").forward(request, response);
             }
         }
-        PublicKey publicKey = RSAUtil.getPublicKey(); // Lấy khóa công khai RSA
-        String encryptedPassword = RSAUtil.encrypt(password, publicKey); // Mã hóa mật khẩu
+        String hashPassword = PasswordUltil.hashPassword(password);
 
         // Tạo người dùng, giỏ hàng
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(encryptedPassword); // Lưu mật khẩu đã mã hóa
+        newUser.setPassword(hashPassword); // Lưu mật khẩu đã mã hóa
         newUser.setName(fullName);
         newUser.setEmail(email);
         newUser.setPhone(phone);

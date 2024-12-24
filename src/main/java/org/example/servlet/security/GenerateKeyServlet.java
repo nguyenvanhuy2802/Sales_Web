@@ -24,6 +24,8 @@ public class GenerateKeyServlet extends HttpServlet {
             String publicKeyBase64 = Base64.getEncoder().encodeToString(ElectronicSignature.getPublicKeyDSA().getEncoded());
             String privateKeyBase64 = Base64.getEncoder().encodeToString(ElectronicSignature.getPrivateKeyDSA().getEncoded());
 
+
+
             HttpSession session = request.getSession(false);
             User user = (User) session.getAttribute("user");
 

@@ -3,7 +3,7 @@ package org.example.servlet.admin;
 
 import org.example.DAO.UserDAO;
 import org.example.model.User;
-import org.example.utils.RSAUtil;
+import org.example.utils.PasswordUltil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 
 @WebServlet("/loginAdmin")
@@ -41,7 +40,8 @@ public class LoginAdminServlet extends HttpServlet {
                 // Giải mã mật khẩu được lưu trong cơ sở dữ liệu bằng RSA
 //                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
 
-                if (currentUser.getPassword().equals(password)) {
+                boolean checkPassword = PasswordUltil.checkPassword(password, currentUser.getPassword());
+                if (checkPassword) {
                     // Đăng nhập thành công
                     HttpSession session = request.getSession();
                     session.setAttribute("admin", currentUser);
