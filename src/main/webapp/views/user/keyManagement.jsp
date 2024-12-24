@@ -21,6 +21,14 @@
             <button class="btn btn-info text-white" onclick="promptReport()">Report</button>
         </div>
 
+
+<div id="timestampModal" style="display: none;">
+    <label for="timestamp">Select Timestamp:</label>
+    <input type="datetime-local" id="timestamp" name="timestamp" required>
+    <button onclick="submitReport()">Submit</button>
+    <button onclick="closeModal()">Cancel</button>
+</div>
+
        <!-- Public Key Display Section -->
        <div class="card shadow-sm">
            <div class="card-header bg-primary text-white">
@@ -235,45 +243,73 @@ function sendKeyToServer(publicKey) {
 }
 
 
-    function generateReport() {
-       fetch('${pageContext.request.contextPath}/reportKey')
-                  .then(response => {
-                      if (!response.ok) {
-                          throw new Error('Network response was not ok');
-                      }
-                      return response.json();
-                  })
-                  .then(data => {
-                      const publicKeyInput = document.getElementById('publicKey');
-                      publicKeyInput.value = data.publicKey;
+  function promptReport() {
+      const publicKeyInput = document.getElementById('publicKey');
 
-                      // Download the private key
-                      downloadKey(data.privateKey, "private_key.txt");
+      // Kiểm tra giá trị của input
+      if (!publicKeyInput || publicKeyInput.value.trim() == '') {
+          alert("Bạn chưa tạo bộ key!");
+          return;
+      }
 
-                      // Download the public key
-                      downloadKey(data.publicKey, "public_key.txt");
-                      alert('Report successfully!');
-                  })
-                  .catch(error => {
-                      console.error('There was a problem with the fetch operation:', error);
-                      alert('Failed to report!');
-                  });
+      // Hiển thị hộp thoại chọn timestamp
+      document.getElementById('timestampModal').style.display = 'block';
+  }
+
+  function closeModal() {
+      document.getElementById('timestampModal').style.display = 'none';
+  }
+
+function submitReport() {
+    const timestampInput = document.getElementById('timestamp');
+
+    // Kiểm tra xem người dùng đã chọn thời gian chưa
+    if (!timestampInput || timestampInput.value.trim() == '') {
+        alert("Bạn chưa chọn thời gian khi key bị lộ!");
+        return;
     }
 
-    function promptReport() {
-            const publicKeyInput = document.getElementById('publicKey');
+    let exposureTimestamp = timestampInput.value;  // Thời gian người dùng chọn
 
-            // Kiểm tra giá trị của input
-            if (!publicKeyInput || publicKeyInput.value.trim() == '') {
-                alert("Bạn chưa tạo bộ key!");
-                return;
-            }
+    // Nếu người dùng chọn định dạng không phải ISO 8601, chuyển đổi thành định dạng đúng
+    // Ví dụ: nếu người dùng chọn ngày tháng năm, chúng ta cần định dạng lại.
+    const date = new Date(exposureTimestamp);
+    if (isNaN(date.getTime())) {
+        alert("Định dạng thời gian không hợp lệ.");
+        return;
+    }
 
-           const userConfirmation = confirm("Bạn có chắc muốn khóa Public Key và tạo bộ key mới không?");
-                 if (userConfirmation) {
-                     generateReport();
-                 }
+
+    exposureTimestamp = date.toISOString();
+
+    // Gửi thông tin lên server
+    fetch('${pageContext.request.contextPath}/reportKey', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            exposureTimestamp: exposureTimestamp
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        return response.json();
+    })
+    .then(data => {
+        alert('Report successfully!');
+        closeModal();  // Đóng hộp thoại
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to report!');
+    });
+}
+
+
+
 
 function copyToClipboard() {
     const publicKeyInput = document.getElementById('publicKey');

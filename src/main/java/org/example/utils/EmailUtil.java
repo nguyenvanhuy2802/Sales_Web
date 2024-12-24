@@ -7,10 +7,10 @@ import java.util.Properties;
 public class EmailUtil {
 
     // Configure your SMTP server details here
-    private static final String SMTP_HOST = "smtp.example.com";
+    private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587"; // or "465" for SSL
     private static final String SMTP_USERNAME = "vanhuy7703@gmail.com";
-    private static final String SMTP_PASSWORD = "your_password";
+    private static final String SMTP_PASSWORD = "zqhy dfja iqny zols";
 
     public static void sendEmail(String toAddress, String subject, String messageContent) throws MessagingException {
         Properties properties = new Properties();

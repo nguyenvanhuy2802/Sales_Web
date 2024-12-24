@@ -49,7 +49,6 @@ $(document).ready(function () {
                                     ${icon}
                                     <span>Đơn hàng: ${orderId} ${verifyStatus}</span>
                                 </span>
-                                ${actionButton}
                             </li>`;
 
                         // Thêm phần tử vào danh sách thông báo

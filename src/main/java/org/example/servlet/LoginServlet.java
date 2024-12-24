@@ -3,7 +3,7 @@ package org.example.servlet;
 
 import org.example.DAO.UserDAO;
 import org.example.model.User;
-import org.example.utils.RSAUtil;
+import org.example.utils.PasswordUltil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,10 +44,9 @@ public class LoginServlet extends HttpServlet {
         }
         if (currentUser != null) {
             try {
-                // Giải mã mật khẩu trong cơ sở dữ liệu bằng khóa riêng RSA
-                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
+               boolean checkPassword = PasswordUltil.checkPassword(password, currentUser.getPassword());
 
-                if (decryptedPassword.equals(password)) {
+                if (checkPassword) {
                     // Đăng nhập thành công
                     HttpSession session = request.getSession();
                     session.setAttribute("user", currentUser);
