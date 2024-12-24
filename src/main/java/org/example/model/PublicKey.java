@@ -10,15 +10,16 @@ public class PublicKey {
     private Timestamp endTime;
     private String status;
     private Timestamp reportTime;
+    private Timestamp leakTime;
 
     public PublicKey(){}
 
-    public PublicKey(int userId,String name) {
+    public PublicKey(int userId, String name) {
         this.userId = userId;
         this.name = name;
     }
 
-    public PublicKey(int keyId, int userId, String name, Timestamp createTime, Timestamp endTime, String status, Timestamp reportTime) {
+    public PublicKey(int keyId, int userId, String name, Timestamp createTime, Timestamp endTime, String status,  Timestamp leakTime, Timestamp reportTime) {
         this.keyId = keyId;
         this.userId = userId;
         this.name = name;
@@ -26,6 +27,7 @@ public class PublicKey {
         this.endTime = endTime;
         this.status = status;
         this.reportTime = reportTime;
+        this.leakTime = leakTime;
     }
 
     public int getKeyId() {
@@ -82,5 +84,13 @@ public class PublicKey {
 
     public void setReportTime(Timestamp reportTime) {
         this.reportTime = reportTime;
+    }
+
+    public Timestamp getLeakTime() {
+        return leakTime;
+    }
+
+    public void setLeakTime(Timestamp leakTime) {
+        this.leakTime = leakTime;
     }
 }

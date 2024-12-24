@@ -39,9 +39,9 @@ public class LoginAdminServlet extends HttpServlet {
         if (currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole())) {
             try {
                 // Giải mã mật khẩu được lưu trong cơ sở dữ liệu bằng RSA
-                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
+//                String decryptedPassword = RSAUtil.decrypt(currentUser.getPassword(), RSAUtil.getPrivateKey());
 
-                if (decryptedPassword.equals(password)) {
+                if (currentUser.getPassword().equals(password)) {
                     // Đăng nhập thành công
                     HttpSession session = request.getSession();
                     session.setAttribute("admin", currentUser);

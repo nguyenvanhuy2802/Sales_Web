@@ -49,60 +49,59 @@
                         <i class="bi bi-exclamation-triangle-fill"></i> Bạn chưa có đơn hàng nào đang chờ xử lý.
                     </div>
                 </c:if>
-                <c:if test="${not empty pendingOrders}">
-                    <table class="table table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Mã Đơn Hàng</th>
-                                <th>Ngày Đặt</th>
-                                <th>Trạng Thái</th>
-                                <th>Tổng Tiền</th>
-                                <th>Thao Tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Loop through pending orders -->
-                            <c:forEach var="order" items="${pendingOrders}">
-                                <tr>
-                                    <td>${order.orderId}</td>
-                                    <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
-                                    <td>${order.status}</td>
-                                    <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm view-details-btn" data-order-id="${order.orderId}">
-                                            <i class="bi bi-eye"></i> Xem Chi Tiết
-                                        </button>
-                                        <button class="btn btn-danger btn-sm cancel-order-btn" data-order-id="${order.orderId}">
-                                            <i class="bi bi-x-circle"></i> Hủy Đơn Hàng
-                                        </button>
-                                      <button class="btn btn-success btn-sm copy-hash-btn" data-order-id="${order.orderId}" data-hashcode="${order.hashCode}">
-                                          <i class="bi bi-clipboard"></i> Coppy hash
-                                      </button>
+               <c:if test="${not empty pendingOrders}">
+                   <table class="table table-hover">
+                       <thead class="table-dark">
+                           <tr>
+                               <th>Mã Đơn Hàng</th>
+                               <th>Ngày Đặt</th>
+                               <th>Tổng Tiền</th>
+                               <th>Người Mua</th>
+                               <th>Địa Chỉ Giao</th>
+                               <th>Thao Tác</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <!-- Loop through pending orders -->
+                           <c:forEach var="order" items="${pendingOrders}">
+                               <tr>
+                                   <td>${order.orderId}</td>
+                                   <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
+                                   <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
+                                   <td>${order.buyerName}</td>
+                                   <td>${order.deliveryAddress}</td>
+                                   <td>
+                                       <button class="btn btn-primary btn-sm view-details-btn" data-order-id="${order.orderId}">
+                                           <i class="bi bi-eye"></i> Xem Chi Tiết
+                                       </button>
+                                       <button class="btn btn-danger btn-sm cancel-order-btn" data-order-id="${order.orderId}">
+                                           <i class="bi bi-x-circle"></i> Hủy Đơn Hàng
+                                       </button>
+                                       <button class="btn btn-success btn-sm copy-hash-btn" data-order-id="${order.orderId}" data-hashcode="${order.hashCode}">
+                                           <i class="bi bi-clipboard"></i> Coppy hash
+                                       </button>
+                                       <!-- Toast Notification -->
+                                       <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                                           <div id="successToast" class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+                                               <div class="d-flex">
+                                                   <div class="toast-body" id="toastMessage"></div>
+                                                   <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </td>
+                               </tr>
+                               <tr id="orderDetails${order.orderId}" class="collapse">
+                                   <td colspan="7">
+                                       <!-- Phần hiển thị danh sách sản phẩm sẽ được tải vào đây -->
+                                       <div class="order-items-container"></div>
+                                   </td>
+                               </tr>
+                           </c:forEach>
+                       </tbody>
+                   </table>
+               </c:if>
 
-
-                                     <!-- Toast Notification -->
-                                     <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                                         <div id="successToast" class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
-                                             <div class="d-flex">
-                                                 <div class="toast-body" id="toastMessage"></div>
-                                                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                             </div>
-                                         </div>
-                                     </div>
-
-
-                                    </td>
-                                </tr>
-                                 <tr id="orderDetails${order.orderId}" class="collapse">
-                                        <td colspan="5">
-                                            <!-- Phần hiển thị danh sách sản phẩm sẽ được tải vào đây -->
-                                            <div class="order-items-container"></div>
-                                        </td>
-                                    </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </c:if>
             </div>
 
 <!-- Đơn hàng đã xử lý (Complete Orders) -->
@@ -117,29 +116,31 @@
         <table class="table table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Mã Đơn Hàng</th>
-                    <th>Ngày Đặt</th>
-                    <th>Trạng Thái</th>
-                    <th>Tổng Tiền</th>
-                    <th>Thao Tác</th>
+                  <th>Mã Đơn Hàng</th>
+                  <th>Ngày Đặt</th>
+                  <th>Tổng Tiền</th>
+                  <th>Người Mua</th>
+                  <th>Địa Chỉ Giao</th>
+                  <th>Thao Tác</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Loop through complete orders -->
                 <c:forEach var="order" items="${completeOrders}">
                     <tr>
-                        <td>${order.orderId}</td>
-                        <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
-                        <td>${order.status}</td>
-                        <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
-                        <td>
+                       <td>${order.orderId}</td>
+                       <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
+                       <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
+                       <td>${order.buyerName}</td>
+                       <td>${order.deliveryAddress}</td>
+                    <td>
                             <button class="btn btn-primary btn-sm view-details-btn" data-order-id="${order.orderId}">
                                 <i class="bi bi-eye"></i> Xem Chi Tiết
                             </button>
                         </td>
                     </tr>
                     <tr id="orderDetails${order.orderId}" class="collapse">
-                        <td colspan="5">
+                        <td colspan="7">
                             <!-- Phần hiển thị danh sách sản phẩm sẽ được tải vào đây -->
                             <div class="order-items-container"></div>
                         </td>
@@ -163,29 +164,31 @@
                     <table class="table table-hover">
                         <thead class="table-dark">
                             <tr>
-                                <th>Mã Đơn Hàng</th>
-                                <th>Ngày Đặt</th>
-                                <th>Trạng Thái</th>
-                                <th>Tổng Tiền</th>
-                                <th>Thao Tác</th>
+                              <th>Mã Đơn Hàng</th>
+                              <th>Ngày Đặt</th>
+                              <th>Tổng Tiền</th>
+                              <th>Người Mua</th>
+                              <th>Địa Chỉ Giao</th>
+                              <th>Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Loop through cancelled orders -->
                             <c:forEach var="order" items="${cancelledOrders}">
                                <tr>
-                                   <td>${order.orderId}</td>
-                                   <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
-                                   <td>${order.status}</td>
-                                   <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
-                                   <td>
+                                 <td>${order.orderId}</td>
+                                 <td><fmt:formatDate value="${order.orderDate}" pattern="dd-MM-yyyy HH:mm:ss" /></td>
+                                 <td><fmt:formatNumber value="${order.totalAmount}" type="number" groupingUsed="true"/> VNĐ</td>
+                                 <td>${order.buyerName}</td>
+                                 <td>${order.deliveryAddress}</td>
+                               <td>
                                        <button class="btn btn-primary btn-sm view-details-btn" data-order-id="${order.orderId}">
                                            <i class="bi bi-eye"></i> Xem Chi Tiết
                                        </button>
                                    </td>
                                </tr>
                                 <tr id="orderDetails${order.orderId}" class="collapse">
-                                       <td colspan="5">
+                                       <td colspan="7">
                                            <!-- Phần hiển thị danh sách sản phẩm sẽ được tải vào đây -->
                                            <div class="order-items-container"></div>
                                        </td>

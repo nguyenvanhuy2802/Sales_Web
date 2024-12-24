@@ -18,6 +18,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Favicon -->
     <link rel="icon" href="${pageContext.request.contextPath}/images/computer.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/headerstyles.css">
 
@@ -43,7 +45,7 @@
                                 ${admin.name}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Hồ sơ</a></li>
+                                <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logoutAdmin">Đăng xuất</a></li>
                             </ul>
                         </li>

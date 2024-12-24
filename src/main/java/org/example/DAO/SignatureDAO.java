@@ -86,6 +86,30 @@ public class SignatureDAO {
         return signatures;
     }
 
+    // Lấy tất cả chữ ký từ bảng signature
+    public List<Signature> getAllSignatures() {
+        String sql = "SELECT * FROM signature";
+        List<Signature> signatures = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                signatures.add(new Signature(
+                        rs.getInt("sign_id"),
+                        rs.getString("sign_value"),
+                        rs.getInt("order_id"),
+                        rs.getTimestamp("sign_time")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return signatures;
+    }
+
     // Xóa chữ ký theo ID
     public boolean deleteSignatureById(int signId) {
         String sql = "DELETE FROM signature WHERE sign_id = ?";

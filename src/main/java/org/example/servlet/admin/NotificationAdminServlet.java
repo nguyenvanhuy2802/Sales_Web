@@ -1,4 +1,4 @@
-package org.example.servlet.security;
+package org.example.servlet.admin;
 
 import com.google.gson.Gson;
 import org.example.DAO.KeyDAO;
@@ -29,8 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/notifications")
-public class NotificationServlet extends HttpServlet {
+@WebServlet("/notificationsAdmin")
+public class NotificationAdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
@@ -38,19 +38,16 @@ public class NotificationServlet extends HttpServlet {
             return;
         }
         User user = (User) session.getAttribute("user");
-
         OrderDAO orderDAO = new OrderDAO();
         List<Order> orderList = orderDAO.getAllOrders();
 
         List<Order> pendingOrders = new ArrayList<>();
         if (!orderList.isEmpty()) {
             for (Order order : orderList) {
-                if (order.getCustomerId() == user.getUserId()) {
                     if (order.getStatus().equalsIgnoreCase("pending")) {
                         pendingOrders.add(order);
 
                     }
-                }
             }
 
             Map<Integer, Boolean> orderResults = new HashMap<>();

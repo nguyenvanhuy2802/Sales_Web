@@ -11,8 +11,8 @@ public class Order {
     private Timestamp orderDate;
     private String status;
     private BigDecimal totalAmount;
-    private int isVerified; // 0: chưa thể xác minh, 1: xác minh hợp lệ, 2: xác minh không hợp lệ
-    private String hashCode; // Mã băm duy nhất cho đơn hàng
+    private Integer keyId;
+    private String hashCode;
 
     public Order() {}
 
@@ -24,14 +24,15 @@ public class Order {
         this.hashCode = hashCode;
     }
 
-    public Order(int customerId, String buyerName, Timestamp orderDate, String status, BigDecimal totalAmount, String deliveryAddress, int isVerified, String hashCode) {
+    public Order(int customerId, String buyerName, Timestamp orderDate, String status, BigDecimal totalAmount,
+                 String deliveryAddress, Integer keyId, String hashCode) {
         this.customerId = customerId;
         this.buyerName = buyerName;
         this.orderDate = orderDate;
         this.status = status;
         this.totalAmount = totalAmount;
         this.deliveryAddress = deliveryAddress;
-        this.isVerified = isVerified;
+        this.keyId = keyId;
         this.hashCode = hashCode;
     }
 
@@ -92,12 +93,12 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public int getIsVerified() {
-        return isVerified;
+    public Integer getKeyId() {
+        return keyId;
     }
 
-    public void setIsVerified(int isVerified) {
-        this.isVerified = isVerified;
+    public void setKeyId(Integer keyId) {
+        this.keyId = keyId;
     }
 
     public String getHashCode() {

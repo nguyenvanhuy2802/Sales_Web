@@ -46,10 +46,12 @@ CREATE TABLE IF NOT EXISTS orders (
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50) DEFAULT 'pending',
     total_amount DECIMAL(10, 2),
-    is_verified TINYINT DEFAULT 0, -- 0: chưa thể xác minh, 1: xác minh hợp lệ, 2: xác minh không hợp lệ
     hash_code VARCHAR(1000) NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES users(user_id)
+    key_id INT DEFAULT NULL, -- Set key_id to NULL by default
+    FOREIGN KEY (customer_id) REFERENCES users(user_id),
+    FOREIGN KEY (key_id) REFERENCES public_key(key_id)
 );
+
 
 -- Tạo bảng chi tiết đơn hàng
 CREATE TABLE IF NOT EXISTS order_items (
@@ -104,15 +106,16 @@ CREATE TABLE IF NOT EXISTS signature (
 );
 
 
-CREATE TABLE IF NOT EXISTS public_key (
-    key_id INT AUTO_INCREMENT PRIMARY KEY, 
-    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-    name VARCHAR(2000) NOT NULL,
-    createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    endTime TIMESTAMP NULL DEFAULT NULL,
-    status ENUM('Enabled', 'Disabled', 'Expired') NOT NULL DEFAULT 'Enabled',
-    reportTime TIMESTAMP NULL DEFAULT NULL
-);
+    CREATE TABLE IF NOT EXISTS public_key (
+        key_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+        name VARCHAR(2000) NOT NULL,
+        createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        endTime TIMESTAMP NULL DEFAULT NULL,
+        status ENUM('Enabled', 'Disabled', 'Expired') NOT NULL DEFAULT 'Enabled',
+        leakTime TIMESTAMP NULL DEFAULT NULL,
+        reportTime TIMESTAMP NULL DEFAULT NULL
+    );
 
 ALTER TABLE public_key AUTO_INCREMENT = 1;
 
@@ -204,11 +207,7 @@ INSERT INTO payments (order_id, amount, payment_method, status) VALUES
 (1, 12000000, 'credit card', 'completed'),
 (2, 11000000, 'paypal', 'completed');
 
--- Insert sample shipping records, with delivery dates and status
-INSERT INTO shipping (order_id, shipping_address, delivery_date, status) VALUES 
-(1, '123 Main St, TP. Hồ Chí Minh', '2023-12-01', 'shipped'),
-(2, '456 Admin St, Bình Định', '2023-12-05', 'delivered');
-
+\
 -- Insert sample carts for customers
 INSERT INTO carts (customer_id) VALUES 
 (1),
@@ -219,12 +218,4 @@ INSERT INTO cart_items (cart_id, product_id, quantity) VALUES
 (1, 1, 1), -- Intel Core i9-12900K
 (2, 2, 1); -- AMD Ryzen 9 5900X
 
--- Insert sample wishlists for customers
-INSERT INTO wishlist (customer_id) VALUES 
-(1),
-(2);
-
--- Insert sample wishlist items, associating products to wishlists
-INSERT INTO wishlist_items (wishlist_id, product_id) VALUES 
-(1, 3), -- NVIDIA GeForce RTX 3080
-(2, 5); -- Corsair Vengeance LPX 16GB RAM
+\
